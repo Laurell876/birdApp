@@ -37,6 +37,7 @@ class UIData {
   static const String verifyImage = "$imageDir/verification.jpg";
   static const String splashScreen = "$imageDir/splashscreen.jpg";
   static const String talawaLogo = "$imageDir/talawaLogo.png";
+  static const String cloud1 = "$imageDir/cloud1.jpg";
   static const String talawaLogoDark = "$imageDir/talawaLogo-dark.png";
   static const String quitoBackground = "$imageDir/quitoBackground.jpg";
 
