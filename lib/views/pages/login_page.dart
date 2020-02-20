@@ -11,6 +11,16 @@ class LoginPage extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
+
+  //ensures the animation is only called once
+  bool first = true;
+
+  void changeFirst() {
+    first=false;
+  }
+
+  
+
 class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
   final PageController _pageController =
       new PageController(initialPage: 1, viewportFraction: 1.0);
@@ -20,8 +30,6 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
   }
-
-
 
 
 
@@ -83,7 +91,7 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
                       children: <Widget>[
                         Text(
                           "Already have an account?",
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(color: Colors.white),
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 8.0),
@@ -122,56 +130,106 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
     );
   }
 
+  
+
   @override
   build(BuildContext context) {
 
-    final controller = AnimationController(
+
+    //this animation length has to be larger becasuse it includes startup time
+    var controller = AnimationController(
       vsync:this,
-      duration: Duration(seconds:2),
+      duration: Duration(milliseconds:2000),
     );
 
-    final animation = Tween(
+    var animation = Tween(
       begin:0.0,
       end:1.0
     ).animate(controller);
 
-
-    final createController = AnimationController(
+    var helloController = AnimationController(
       vsync:this,
-      duration: Duration(seconds:2),
+      duration: Duration(milliseconds:500),
     );
 
-    final createAnimation = Tween(
+    var helloAnimation = Tween(
+      begin:0.0,
+      end:1.0
+    ).animate(helloController);
+
+    var createController = AnimationController(
+      vsync:this,
+      duration: Duration(milliseconds:500),
+    );
+
+    var createAnimation = Tween(
       begin:0.0,
       end:1.0
     ).animate(createController);
 
-    final loginController = AnimationController(
+    var loginController = AnimationController(
       vsync:this,
-      duration: Duration(seconds:2),
+      duration: Duration(milliseconds:500),
     );
 
-    final loginAnimation = Tween(
+    var loginAnimation = Tween(
       begin:0.0,
       end:1.0
     ).animate(loginController);
 
+    
+
+
 
     Future<void>  load() async {
       await controller.forward();
+      await helloController.forward();
       await createController.forward();
       await loginController.forward();
+      changeFirst();
+    }
+
+    //checks to see if this is the first time the state is loading
+    if(first != true) {
+      animation = Tween(
+        begin:1.0,
+        end:1.0
+      ).animate(controller);
+
+      helloAnimation = Tween(
+        begin:1.0,
+        end:1.0
+      ).animate(helloController);
+
+      createAnimation = Tween(
+        begin:1.0,
+        end:1.0
+      ).animate(createController);
+
+
+      loginAnimation = Tween(
+        begin:1.0,
+        end:1.0
+      ).animate(loginController);
+
     }
     load();
+
+    
+   
+
+
       
 
 
+
+
+
     
     
     
 
-        mainScreen() => Container(
-        child: new Column(
+        mainScreen() => new Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
 
@@ -195,6 +253,78 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
 
               child: Column(
                 children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    width: _media != null
+                  ? _media.size.width
+                  : MediaQuery.of(context).size.width,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  
+                  FadeTransition(
+                    opacity: helloAnimation,
+                    child: Container(
+                    child: Text("Hello",
+                  style:TextStyle(
+                    color:Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 60,
+                  ),
+                  ),
+                  ),
+                    
+                  ),
+
+                  FadeTransition(
+                    opacity: helloAnimation,
+                    child: Container(
+                    child: Text("There",
+                  style:TextStyle(
+                    color:Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 60,
+                  ),
+                  ),
+                  ),
+                    
+                  ),
+
+
+                  
+                  
+
+                  
+                  
+                  
+                ],
+              ),
+              FadeTransition(
+                    opacity: helloAnimation,
+                    child: Container(
+                    child: Text(".",
+                  style:TextStyle(
+                    color:Colors.orange,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 60,
+                  ),
+                  ),
+                  ),
+                    
+                  ),
+              
+
+                ],
+              ),
+              
+            ),
+                  
+
+
+
 
                   FadeTransition(
               opacity: createAnimation,
@@ -204,7 +334,7 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
               width: _media != null
                   ? _media.size.width
                   : MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 90.0),
+              margin: const EdgeInsets.only(left: 20.0, right: 30.0, top: 10.0),
               alignment: Alignment.center,
               child: new Row(
                 children: <Widget>[
@@ -227,7 +357,7 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
                           children: <Widget>[
                             new Expanded(
                               child: Text(
-                                "CREATE AN ACCOUNT",
+                                "Create an account",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 18,
@@ -253,12 +383,11 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
             FadeTransition(
               opacity: loginAnimation,
               child: Container(
-              //padding: EdgeInsets.all(100.0),
               child: new Container(
               width: _media != null
                   ? _media.size.width
                   : MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
+              margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
               alignment: Alignment.center,
               child: new Row(
                 children: <Widget>[
@@ -278,7 +407,7 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
                           children: <Widget>[
                             new Expanded(
                               child: Text(
-                                "LOGIN",
+                                "Login",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     //color: UIData.quitoThemeColor,
@@ -320,13 +449,13 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
 
 
           ],
-        ),
-      );
+        );
 
 
 
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: 
       

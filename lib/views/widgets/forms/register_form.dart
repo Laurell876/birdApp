@@ -60,7 +60,8 @@ class RegisterFormState extends State<RegisterForm> {
               style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
+                    borderRadius: BorderRadius.circular(5.0),
+                    ),
                 prefixIcon: Icon(Icons.person),
                 labelText: "First Name",
                 labelStyle: TextStyle(color: Colors.white),
@@ -168,15 +169,23 @@ class RegisterFormState extends State<RegisterForm> {
               height: 20,
             ),
             Container(
+              
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
               width: double.infinity,
               child: RaisedButton(
+                
                 padding: EdgeInsets.all(12.0),
-                shape: StadiumBorder(),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)
+                ),
                 child: _progressBarState
                     ? const CircularProgressIndicator()
                     : Text(
-                        "SIGN UP",
+                        "Sign up",
+                        style: TextStyle(
+                          color:Colors.black,
+                          fontSize: 18,
+                          )
                       ),
                 color: Colors.white,
                 onPressed: () async {

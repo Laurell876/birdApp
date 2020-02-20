@@ -30,11 +30,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: UIData.appName,
       theme: ThemeData(
+        
           primaryColor: UIData.quitoThemeColor,
           fontFamily: UIData.quickFont,
           primarySwatch: UIData.quitoThemeColor),
-      debugShowCheckedModeBanner: false,
-      showPerformanceOverlay: false,
+          debugShowCheckedModeBanner: false,
+          showPerformanceOverlay: false,
 
       home: FutureBuilder(
         future: Provider.of<AuthController>(context).getUser(),
