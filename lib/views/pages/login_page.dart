@@ -51,7 +51,10 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
                       children: <Widget>[
                         Text(
                           "Dont have an account?",
-                          style: TextStyle(color: Colors.grey),
+                          
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                         Container(
                           margin: EdgeInsets.only(left: 8.0),
@@ -268,7 +271,7 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
                   FadeTransition(
                     opacity: helloAnimation,
                     child: Container(
-                    child: Text("Hello",
+                    child: Text("HELLO",
                   style:TextStyle(
                     color:Colors.white,
                     fontWeight: FontWeight.bold,
@@ -278,11 +281,12 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
                   ),
                     
                   ),
+
 
                   FadeTransition(
                     opacity: helloAnimation,
                     child: Container(
-                    child: Text("There",
+                    child: Text("THERE",
                   style:TextStyle(
                     color:Colors.white,
                     fontWeight: FontWeight.bold,
@@ -292,14 +296,6 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
                   ),
                     
                   ),
-
-
-                  
-                  
-
-                  
-                  
-                  
                 ],
               ),
               FadeTransition(
@@ -326,7 +322,7 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
 
 
 
-                  FadeTransition(
+              FadeTransition(
               opacity: createAnimation,
               child: Container(
               //padding: EdgeInsets.all(100.0),
@@ -378,7 +374,7 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
               
             ),
 
-
+            SizedBox(height:5),
 
             FadeTransition(
               opacity: loginAnimation,
@@ -472,9 +468,23 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
           controller: _pageController,
           physics: new BouncingScrollPhysics(),
           children: <Widget>[
-            loginScreenForm(),
-            mainScreen(),
-            registrationScreenForm()
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              loginScreenForm(),
+            ],
+          ),
+          
+
+          mainScreen(),
+
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              registrationScreenForm()
+            ],
+          ),
+            
           ],
         ),
       )
