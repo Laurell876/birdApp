@@ -8,7 +8,17 @@ import 'package:talawa/utils/uidata.dart';
 import 'package:talawa/views/widgets/common_drawer.dart';
 import 'package:intl/intl.dart';
 
-class HomePage extends StatelessWidget {
+import 'package:talawa/controllers/user_controller.dart';
+import 'package:talawa/model/user.dart';
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   BuildContext _context;
 
   @override
@@ -16,15 +26,53 @@ class HomePage extends StatelessWidget {
     _context = context;
     Provider.of<AuthController>(context, listen: false).getUser();
     return Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(
-        title: Image(
-          image: AssetImage(UIData.talawaLogoDark),
-          height: 50,
-        ),
+        // title: Image(
+        //   image: AssetImage(UIData.talawaLogoDark),
+        //   height: 50,
+        // ),
+        title: Text("Activities"),
+        leading: Consumer2<AuthController, UserController>(
+            builder: (context, authController, userController, child) {
+          return FutureBuilder(
+              future: userController.getUser(authController.currentUserId),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  User user = snapshot.data;
+                  return Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: InkWell(
+                        child: CircleAvatar(
+                          
+                          backgroundColor: Colors.blue,
+                          child: Text(
+                            user.firstName.substring(0, 1),
+                            style: TextStyle(fontSize: 25),
+                          ),
+                        ),
+                        onTap: () => _scaffoldKey.currentState.openDrawer()),
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              });
+        }),
+
         backgroundColor: Colors.transparent,
         elevation: 0.0,
       ),
+
+      // appBar: new AppBar(
+      // title: new Text("Activities"),
+      // leading: new IconButton(
+      //     icon: new Icon(Icons.apps),
+      //     onPressed: () => _scaffoldKey.currentState.openDrawer())),
+
       drawer: CommonDrawer(),
+      //drawer: CommonDrawer(),
       body: Stack(
         children: <Widget>[
           Positioned.fill(
@@ -49,44 +97,34 @@ class HomePage extends StatelessWidget {
     return Column(
       children: <Widget>[
         Expanded(
-          flex: 1,
-          child: Center(
-            child: Text(
-              'Activities',
-              style: TextStyle(fontSize: 25),
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 9,
-          child: Consumer2<ActivityController, AuthController>(
-            builder: (context, activityController, authController, child){
+            flex: 9,
+            child: Consumer2<ActivityController, AuthController>(
+                builder: (context, activityController, authController, child) {
               return FutureBuilder<List<Activity>>(
-              future: activityController.getActivitiesByUser(context, authController.currentUserId),
-              builder: (_context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data.length > 0) {
-                    return ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (_context, index) {
-                        Activity activity = snapshot.data[index];
-                        return Column(
-                          children: <Widget>[eventCard(activity)],
+                  future: activityController.getActivitiesByUser(
+                      context, authController.currentUserId),
+                  builder: (_context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data.length > 0) {
+                        return ListView.builder(
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (_context, index) {
+                            Activity activity = snapshot.data[index];
+                            return Column(
+                              children: <Widget>[eventCard(activity)],
+                            );
+                          },
                         );
-                      },
-                    );
-                  } else {
-                    return Center(
-                        child: Text('No Activities',
-                            style: TextStyle(color: Colors.grey)));
-                  }
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              });
-            }
-          )
-        )
+                      } else {
+                        return Center(
+                            child: Text('No Activities',
+                                style: TextStyle(color: Colors.grey)));
+                      }
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  });
+            }))
       ],
     );
   }
@@ -117,7 +155,9 @@ class HomePage extends StatelessWidget {
                       SizedBox(
                         height: 5,
                       ),
-                      Text(DateFormat("MMMM d, y\nh:m aaa").format(activity.datetime),
+                      Text(
+                          DateFormat("MMMM d, y\nh:mm aaa")
+                              .format(activity.datetime),
                           style: TextStyle(fontSize: 18)),
                     ],
                   ),
