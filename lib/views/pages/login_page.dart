@@ -451,7 +451,7 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
 
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      //resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: 
       
@@ -468,21 +468,24 @@ class _LoginScreenState extends State<LoginPage> with TickerProviderStateMixin {
           controller: _pageController,
           physics: new BouncingScrollPhysics(),
           children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              loginScreenForm(),
-            ],
+          //has to be scrollable so the screen can adjust when the keyboard is tapped
+          Center(
+            child: SingleChildScrollView(
+                        child: 
+                  loginScreenForm(),
+
+            ),
           ),
           
 
           mainScreen(),
 
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              registrationScreenForm()
-            ],
+                    //has to be scrollable so the screen can adjust when the keyboard is tapped
+          Center(
+            child: SingleChildScrollView(
+                child:registrationScreenForm()
+                
+            ),
           ),
             
           ],
