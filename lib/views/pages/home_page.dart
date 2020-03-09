@@ -11,6 +11,9 @@ import 'package:intl/intl.dart';
 import 'package:talawa/controllers/user_controller.dart';
 import 'package:talawa/model/user.dart';
 
+import 'package:talawa/enums/connectivity_status.dart';
+
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -19,10 +22,30 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  _showSnackBar() {
+    print("Show SnackBar Here");
+    final snackBar = new SnackBar(
+      content: new Text("Device Disconnected")
+    );
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+    return CircularProgressIndicator();
+  }
+
+
+
   BuildContext _context;
 
   @override
   Widget build(BuildContext context) {
+
+    var connectionStatus = Provider.of<ConnectivityStatus>(context, listen:true);
+    print(connectionStatus);
+    if (connectionStatus == ConnectivityStatus.Offline ) {
+      _showSnackBar();
+    }
+
+
+
     _context = context;
     Provider.of<AuthController>(context, listen: false).getUser();
     return Scaffold(
@@ -32,7 +55,7 @@ class _HomePageState extends State<HomePage> {
         //   image: AssetImage(UIData.talawaLogoDark),
         //   height: 50,
         // ),
-        title: Text("Activities"),
+        title: Text(connectionStatus.toString()),
         leading: Consumer2<AuthController, UserController>(
             builder: (context, authController, userController, child) {
           return FutureBuilder(
